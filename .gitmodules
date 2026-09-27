@@ -1,0 +1,12 @@
+[submodule "models/EfficientLoFTR"]
+	path = models/EfficientLoFTR
+	url = https://github.com/zju3dv/EfficientLoFTR.git
+[submodule "models/LoFTR"]
+	path = models/LoFTR
+	url = https://github.com/zju3dv/LoFTR.git
+[submodule "models/RoMa"]
+	path = models/RoMa
+	url = https://github.com/Parskatt/RoMa.git
+[submodule "models/RoMaV2"]
+	path = models/RoMaV2
+	url = https://github.com/Parskatt/RoMaV2.git
