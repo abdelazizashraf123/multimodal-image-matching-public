@@ -10,3 +10,9 @@
 [submodule "models/RoMaV2"]
 	path = models/RoMaV2
 	url = https://github.com/Parskatt/RoMaV2.git
+[submodule "models/LoMa"]
+	path = models/LoMa
+	url = https://github.com/davnords/LoMa.git
+[submodule "models/mast3r"]
+	path = models/mast3r
+	url = https://github.com/naver/mast3r.git

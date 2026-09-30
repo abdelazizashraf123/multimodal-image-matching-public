@@ -14,6 +14,17 @@ hides ops from torch.utils.flop_counter. We call the module forwards directly un
 only while a FlopCounterMode is active, swap torch.inference_mode for torch.no_grad so the DINOv2
 pass inside the descriptor is counted as well (a-shahzeen's 7,700 GFLOPs row includes it). Same
 ops, same numbers; timing and evaluation take the plain path.
+ONE CODE PATH HERE, and it is the public one. This wrapper uses `loma.loma.LoMa`, the released
+inference API, which is what the pinned submodule (models/LoMa) contains. If you compare against
+numbers circulated internally, note they may have come from a different code path whose
+descriptor handling differs by one autocast cast (fp16 inside an otherwise bf16 region); it is
+deterministic and uses the same weights, but shifts the match count slightly. Numbers produced
+from this repo are the ones a reader reproduces with the released package.
+
+Base version only. `--loma_variant` defaults to loma_B, the released pretrained model with NO
+fine-tuning of any kind. LoMa-B128 is the same matcher on a 128-d DeDoDe-B descriptor, which
+drops DINOv2 and is far smaller and cheaper, at some cost in accuracy.
+
 Weights: the repo downloads them itself into $TORCH_HOME/hub/checkpoints (pre-fetched on the login
 node because compute nodes have no internet): loma_B.pt, dad.pth, dedode_descriptor_G.pth,
 dinov2_vitl14_pretrain.pth.
@@ -26,7 +37,11 @@ import torch
 import torch.nn.functional as F
 from PIL import Image
 
-LOMA = "/cta/users/h-abdelaziz/projects/LoMa"
+import os as _os
+_REPO = _os.path.dirname(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+LOMA = (_os.path.join(_REPO, "models", "LoMa")
+        if _os.path.isdir(_os.path.join(_REPO, "models", "LoMa", "src"))
+        else "/cta/users/h-abdelaziz/projects/LoMa")
 VARIANTS = ("loma_B", "loma_B128", "loma_L", "loma_G", "loma_R")
 
 
